@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С днём рождения</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0e0e0e;
+    --white: #f5f3ef;
+    --gray: #9a9a9a;
+    --light: #dedad4;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Montserrat', sans-serif;
+    --gap: 6px;         /* зазор между фото */
+    --pad: 0.4rem;      /* отступы по бокам страницы */
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ══ INTRO ══ */
+  .intro {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 3rem 2rem;
+    position: relative;
+  }
+  .intro::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 1px; height: 50px;
+    background: var(--black); opacity: 0.2;
+  }
+  .intro-year {
+    font-size: 9px; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gray);
+    margin-bottom: 2rem;
+  }
+  .intro-name {
+    font-family: var(--serif);
+    font-size: clamp(48px, 11vw, 88px);
+    font-weight: 300; line-height: 1;
+    letter-spacing: -0.02em; margin-bottom: 1.2rem;
+  }
+  .intro-sub {
+    font-size: 10px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--gray);
+  }
+
+  /* ══ SECTION LABEL ══ */
+  .section-label {
+    font-size: 9px; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gray);
+    text-align: center; padding: 3.5rem 0 1.8rem;
+  }
+
+  /* ══ THEME HEADER ══ */
+  .theme-header {
+    background: var(--black); color: var(--white);
+    padding: 1.6rem var(--pad);
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+  }
+  .theme-title {
+    font-family: var(--serif);
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 300; font-style: italic; line-height: 1;
+  }
+  .theme-meta {
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,243,239,0.38);
+    text-align: right; line-height: 1.8;
+  }
+
+  /* ══ THEME TEXT ══ */
+  .theme-text {
+    padding: 1.6rem var(--pad) 1rem;
+    font-family: var(--serif); font-style: italic;
+    font-size: 16px; line-height: 1.85;
+    color: #1a1a1a; max-width: 560px;
+  }
+
+  /* ══════════════════════════════════════════
+     MASONRY — главный контейнер фото
+     Меняй columns-N чтобы задать количество колонок:
+       cols-2 = 2 колонки
+       cols-3 = 3 колонки  ← по умолчанию
+       cols-4 = 4 колонки
+       cols-5 = 5 колонок
+  ══════════════════════════════════════════ */
+  .mosaic {
+    column-gap: var(--gap);
+    padding: var(--gap) var(--pad);
+  }
+  .cols-2 { columns: 2; }
+  .cols-3 { columns: 3; }
+  .cols-4 { columns: 4; }
+  .cols-5 { columns: 5; }
+
+  /* каждый элемент мозаики */
+  .mosaic-item {
+    break-inside: avoid;
+    margin-bottom: var(--gap);
+    background: var(--light);
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .mosaic-item img {
+    width: 100%;
+    height: auto;          /* НЕ обрезается, полное фото */
+    display: block;
+    image-orientation: from-image;  /* исправление поворота EXIF */
+    filter: grayscale(10%);
+    transition: filter 0.4s;
+  }
+  .mosaic-item:hover img { filter: grayscale(0%); }
+
+  /* видео в мозаике */
+  .mosaic-item video {
+    width: 100%; display: block;
+    background: var(--black);
+  }
+
+  /* ══ CLOSING ══ */
+  .closing {
+    background: var(--black); color: var(--white);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem;
+    margin-top: 2.5rem;
+  }
+  .closing-label {
+    font-size: 9px; letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,243,239,0.3); margin-bottom: 2.5rem;
+  }
+  .closing-wish {
+    font-family: var(--serif);
+    font-size: clamp(24px, 6vw, 48px);
+    font-weight: 300; font-style: italic;
+    line-height: 1.35; max-width: 580px; margin-bottom: 2.5rem;
+  }
+  .closing-text {
+    font-size: 13px; line-height: 2.1;
+    color: rgba(245,243,239,0.58);
+    max-width: 400px; margin-bottom: 3rem;
+  }
+  .closing-divider {
+    width: 32px; height: 1px;
+    background: rgba(245,243,239,0.18);
+    margin: 0 auto 2rem;
+  }
+  .closing-from {
+    font-size: 9px; letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,243,239,0.28);
+  }
+
+  @media (max-width: 500px) {
+    .cols-3, .cols-4, .cols-5 { columns: 2; }
+    .cols-2 { columns: 1; }
+    .theme-header { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    .theme-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     ВВОДНАЯ
+══════════════════════════════════════ -->
+<section class="intro">
+  <div class="intro-year">2025 — 2026</div>
+  <div class="intro-name">ЕГОР</div>
+  <div class="intro-sub">с днём рождения</div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     ИЗБРАННОЕ
+     Управление: меняй класс cols-2 / cols-3 / cols-4 / cols-5
+     Добавить фото: скопируй <div class="mosaic-item"><img src="..."></div>
+     Убрать фото: удали весь <div class="mosaic-item">...</div>
+══════════════════════════════════════ -->
+<div class="section-label">избранное  - здесь все наши общие фото, воспоминания</div>
+
+<div class="mosaic cols-4">
+  <div class="mosaic-item"><img src="IMG_2478.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_2486.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="-638269203359686798.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item"><img src="IMG_2618.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_2682.png" alt=""></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_3844.MOV" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item"><img src="IMG_2727.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_2764.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_2827.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_2836.JPG" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_3561.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_3566.png" alt=""></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_3842.MOV" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item"><img src="IMG_3837.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_3847.JPG" alt="" ></div>
+  <div class="mosaic-item"><img src="IMG_4591.JPG" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_4667.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_4673.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_4691.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_4703.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5713.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5718.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5721.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5811.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_5819.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_5826.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_5875.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5878.png" alt=""></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="-6499495722516616175.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item"><img src="IMG_6132.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5884.png" alt=""></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5828.MOV" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5830.MOV" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5831.MOV" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5833.MOV" type="video/mp4"></video>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+
+ <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_3842.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_3844.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5828.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5830.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5831.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="IMG_5833.mp4" type="video/mp4"></video>
+  </div>
+
+     БЛОК 1 — МЫ РОССИЯНЕ
+     cols-3 = 3 колонки. Меняй на cols-2/4/5 по вкусу.
+══════════════════════════════════════ -->
+<div class="theme-header">
+  <div class="theme-title">мы россияне</div>
+  <div class="theme-meta">поездка<br>2026</div>
+</div>
+
+<p class="theme-text">
+  <!-- ТВОЙ ТЕКСТ — 2-3 предложения про поездку -->
+  Это была одна из лучших поездок в моей жизни, спасибо бро, наилучшее время препровождение. 
+</p>
+
+<div class="mosaic cols-3"> 
+  <div class="mosaic-item"><img src="IMG_5998.JPG" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6282.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6288.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6295.png" alt=""style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6301.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6302.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6306.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6314.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6316.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6334.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6335.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6339.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6356.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6357.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6360.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6366.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6373.png" alt=""></div>
+  <div class="mosaic-item"><img src="jaba.jpg" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6389.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6395.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6403.png" alt=""></div>
+  <div class="mosaic-item">
+    <video controls playsinline><source src="-1388380951790050611.mp4" type="video/mp4"></video>
+  </div>
+  <div class="mosaic-item"><img src="IMG_6418.png" alt="" style="transform: rotate(180deg);"></div>
+  <div class="mosaic-item"><img src="IMG_6426.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6428.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6432.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6436.png" alt=""></div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     БЛОК 2 — ВЕЛИКИЙ НОВГОРОД
+══════════════════════════════════════ -->
+<div class="theme-header">
+  <div class="theme-title">великий новгород</div>
+  <div class="theme-meta">соревнования<br>баскетбол</div>
+</div>
+
+<!-- <p class="theme-text">
+   ТВОЙ ТЕКСТ — 2-3 предложения про соревнования 
+  
+</p> --> 
+
+<div class="mosaic cols-3">
+  <div class="mosaic-item"><img src="camphoto_959030623.jpg" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6069.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6108.JPG" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6023.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6040.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_6011.png" alt=""style="transform: rotate(180deg);"></div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     БЛОК 3 — БАСКЕТ
+══════════════════════════════════════ -->
+<div class="theme-header">
+  <div class="theme-title">баскет</div>
+  <div class="theme-meta">его игра<br>ваша игра</div>
+</div>
+
+<p class="theme-text">
+  <!-- ТВОЙ ТЕКСТ — 2-3 предложения про баскет -->
+  Баскетбол -- ноетъемлемая часть нашей дружбы. Твой вклад в нее безграничен, без тебя мы бы не добились всего этого
+</p>
+
+<div class="mosaic cols-3">
+  <div class="mosaic-item"><img src="IMG_5130.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5523.JPG" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5682.jpg" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5131.png" alt=""></div>
+  <div class="mosaic-item"><img src="DSC08471.jpeg" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_5401.png" alt=""></div>
+  <div class="mosaic-item"><img src="IMG_4860.JPG" alt=""></div>
+  
+</div>
+
+
+<!-- ══════════════════════════════════════
+     ФИНАЛЬНОЕ ПОЗДРАВЛЕНИЕ
+══════════════════════════════════════ -->
+<section class="closing">
+  <div class="closing-label">с днём рождения</div>
+  <div class="closing-wish">
+    [главная фраза поздравления]
+  </div>
+  <div class="closing-text">
+    Напиши здесь своё поздравление. Это главное место — всё остальное было прологом к этим словам.
+  </div>
+  <div class="closing-divider"></div>
+  <div class="closing-from">от [твоё имя]</div>
+</section>
+
+</body>
+</html>
